@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.iniyan.findmobilenumber"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -42,5 +42,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "com.google.android.gms:play-services-auth:17.0.0"
 }
