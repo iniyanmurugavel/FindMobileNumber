@@ -23,17 +23,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        tryGetCurrentUserPhoneNumber(this)
-//        googleApiClient = GoogleApiClient.Builder(this).addApi(Auth.CREDENTIALS_API).build()
-//        if (phoneNumber.isEmpty()) {
-//            val hintRequest = HintRequest.Builder().setPhoneNumberIdentifierSupported(true).build()
-//            val intent = Auth.CredentialsApi.getHintPickerIntent(googleApiClient, hintRequest)
-//            try {
-//                startIntentSenderForResult(intent.intentSender, REQUEST_PHONE_NUMBER, null, 0, 0, 0);
-//            } catch (e: IntentSender.SendIntentException) {
-//                Toast.makeText(this, "failed to show phone picker", Toast.LENGTH_SHORT).show()
-//            }
-//        } else
+        googleApiClient = GoogleApiClient.Builder(this).addApi(Auth.CREDENTIALS_API).build()
+        if (phoneNumber.isEmpty()) {
+            val hintRequest = HintRequest.Builder().setPhoneNumberIdentifierSupported(true).build()
+            val intent = Auth.CredentialsApi.getHintPickerIntent(googleApiClient, hintRequest)
+            try {
+                startIntentSenderForResult(intent.intentSender, REQUEST_PHONE_NUMBER, null, 0, 0, 0);
+            } catch (e: IntentSender.SendIntentException) {
+                Toast.makeText(this, "failed to show phone picker", Toast.LENGTH_SHORT).show()
+            }
+        } else
             onGotPhoneNumberToSendTo()
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -58,34 +57,5 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_PHONE_NUMBER = 1
         private var phoneNumber = ""
-
-        @SuppressLint("MissingPermission", "HardwareIds", "ServiceCast")
-        private fun tryGetCurrentUserPhoneNumber(context: Context): String {
-            if (phoneNumber.isNotEmpty())
-                return phoneNumber
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val subscriptionManager = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
-                try {
-                    subscriptionManager.activeSubscriptionInfoList?.forEach {
-                        val number: String? = it.number
-                        if (!number.isNullOrBlank()) {
-                            phoneNumber = number
-                            return number
-                        }
-                    }
-                } catch (ignored: Exception) {
-                }
-            }
-            try {
-                val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                val number = telephonyManager.line1Number ?: ""
-                if (!number.isBlank()) {
-                    phoneNumber = number
-                    return number
-                }
-            } catch (e: Exception) {
-            }
-            return ""
-        }
     }
 }
